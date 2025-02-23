@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Copy, Check } from 'lucide-react';
@@ -43,7 +42,7 @@ export const Delimiter: React.FC = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-4xl mx-auto p-6 space-y-8"
+      className="max-w-4xl mx-auto p-6 space-y-8 glass-effect rounded-xl"
     >
       <div className="space-y-4">
         <h2 className="text-2xl font-semibold text-center mb-8">Delimiter Tool</h2>
