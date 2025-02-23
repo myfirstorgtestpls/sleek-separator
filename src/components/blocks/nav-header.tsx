@@ -3,6 +3,7 @@
 
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
 
 function NavHeader() {
   const [position, setPosition] = useState({
@@ -11,15 +12,31 @@ function NavHeader() {
     opacity: 0,
   });
 
+  const location = useLocation();
+
+  const links = [
+    { name: 'Delim', path: '/' },
+    { name: 'Case', path: '/case-converter' },
+    { name: 'Counter', path: '/text-counter' },
+    { name: 'URL', path: '/url-encoder' },
+    { name: 'Base64', path: '/base64' },
+  ];
+
   return (
     <ul
       className="relative mx-auto flex w-fit rounded-full border-2 border-black bg-white p-1"
       onMouseLeave={() => setPosition((pv) => ({ ...pv, opacity: 0 }))}
     >
-      <Tab setPosition={setPosition}>Delim</Tab>
-      <Tab setPosition={setPosition}>About</Tab>
-      <Tab setPosition={setPosition}>Settings</Tab>
-
+      {links.map((link) => (
+        <Tab 
+          key={link.path} 
+          setPosition={setPosition}
+          active={location.pathname === link.path}
+          to={link.path}
+        >
+          {link.name}
+        </Tab>
+      ))}
       <Cursor position={position} />
     </ul>
   );
@@ -28,9 +45,13 @@ function NavHeader() {
 const Tab = ({
   children,
   setPosition,
+  active,
+  to,
 }: {
   children: React.ReactNode;
   setPosition: any;
+  active: boolean;
+  to: string;
 }) => {
   const ref = useRef<HTMLLIElement>(null);
   return (
@@ -38,7 +59,6 @@ const Tab = ({
       ref={ref}
       onMouseEnter={() => {
         if (!ref.current) return;
-
         const { width } = ref.current.getBoundingClientRect();
         setPosition({
           width,
@@ -46,9 +66,11 @@ const Tab = ({
           left: ref.current.offsetLeft,
         });
       }}
-      className="relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase text-white mix-blend-difference md:px-5 md:py-3 md:text-base"
+      className={`relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase text-white mix-blend-difference md:px-5 md:py-3 md:text-base ${
+        active ? 'font-bold' : ''
+      }`}
     >
-      {children}
+      <Link to={to}>{children}</Link>
     </li>
   );
 };
